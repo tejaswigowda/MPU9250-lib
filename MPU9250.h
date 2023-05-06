@@ -218,11 +218,16 @@ public:
         return has_connected && (read_byte(mpu_i2c_addr, INT_STATUS) & 0x01);
     }
 
+    int count = 0;
     bool update() {
         if (!available()) return false;
+        
+        count++;
 
         update_accel_gyro();
-        update_mag();
+        if(count%2 == 0){
+            update_mag();
+        }
 
         // Madgwick function needs to be fed North, East, and Down direction like
         // (AN, AE, AD, GN, GE, GD, MN, ME, MD)
